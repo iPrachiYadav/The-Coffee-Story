@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <!-- Created using Storyline 360 - http://www.articulate.com  -->
-  <!-- version: 3.79.30921.0 -->
+  <!-- version: 3.82.31354.0 -->
   <title>The Coffee Story </title>
   <meta http-equiv="x-ua-compatible" content="IE=edge"/>
   <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no,shrink-to-fit=no,minimal-ui"/>
@@ -28,16 +28,16 @@
       captureRc: false,
       browserSize: 'optimal',
       bgColor: '#282828',
-      features: 'ConnectionMessages,DropIn1,DropIn2,DropIn3,DropIn4,FullScreenToggle,LayerPresentAsDialog,MultipleQuizTracking,UpdatedThemeEditor,VideoSync',
+      features: 'BackgroundAudioTriggers,BackgroundAudioVolumeVariable,ConnectionMessages,DropIn1,DropIn2,DropIn3,DropIn4,DropIn5,LayerPresentAsDialog,MultiLineTextEntry,MultipleQuizTracking,PlayerTooltips,UpdatedThemeEditor',
       themeName: 'unified',
       preloaderColor: '#FFFFFF',
       suppressAnalytics: false,
       productChannel: 'stable',
       publishSource: 'storyline',
-      aid: 'aid|34b54ea2-836e-482d-9ae2-6fa4f9931e88',
+      aid: 'aid|76878a33-adce-460b-a49c-eb243276bcfd',
       cid: 'f49a97f3-e60d-42d0-b2d7-06a9b884e514',
-      playerVersion: '3.79.30921.0',
-      publishTimestamp: '2023-09-12T13:13:03.3063506Z',
+      playerVersion: '3.82.31354.0',
+      publishTimestamp: '2024-01-31T20:36:25.8968006Z',
       maxIosVideoElements: 10,
       connectionSettings: { message: 'You%20are%20offline.%20Trying%20to%20reconnect...', useDarkTheme: false, mode: 'disabled' },
 
@@ -173,7 +173,7 @@
     transform: translateX(-50%);
   }
 
-  .is-portrait .warn-connection-content {
+  .view-mobile.is-portrait .warn-connection-content {
     transform: translate(-50%, calc(-100% - 15px));
   }
 
@@ -382,11 +382,14 @@
       }
 
       var isPortrait = document.body.classList.contains('is-portrait');
+      var isMobile = document.body.classList.contains('view-mobile');
       var warningEl = document.querySelector('.warn-connection-content');
 
-      if (isPortrait) {
+      if (isPortrait && isMobile) {
         var slide = document.querySelector('.primary-slide');
-        var slideRect = slide.getBoundingClientRect();
+        var slideRect = slide != null
+          ? slide.getBoundingClientRect()
+          : { top: window.innerHeight, left: 0, width: window.innerWidth };
 
         warningEl.style.top = `${slideRect.top}px`
         warningEl.style.left = `${slideRect.left + slideRect.width / 2}px`
@@ -412,7 +415,7 @@
     var warnDialogEl = document.querySelector('.warn-connection-dialog');
 
     function disableKeys() {
-      if (DS.views.nsStack.length === 1) {
+      if (DS.views && DS.views.nsStack && DS.views.nsStack.length === 1) {
         DS.views.nsStack[0].tabReachable = false
         DS.views.nsStack[0].updateTabIndex(true, true);
       }
@@ -425,8 +428,8 @@
     }
 
     function enableKeys() {
-      document.body.removeChild(accStyle);
-      if (DS.views.nsStack.length === 1 && DS.views.nsStack[0].name === '_frame') {
+      accStyle.remove();
+      if (DS.views && DS.views.nsStack && DS.views.nsStack.length === 1 && DS.views.nsStack[0].name === '_frame') {
         DS.views.nsStack[0].tabReachable = true;
         DS.views.nsStack[0].updateTabIndex();
       }
